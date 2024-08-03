@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Astronomy Picture of the Day</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">Astronomy</div>
+            <nav>
+                <a href="index.html">Home</a>
+                <a href="about.html">About</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <h1>Astronomy Picture of the Day</h1>
+        <input type="date" id="dateInput">
+        <button id="fetchPicture">Fetch Picture</button>
+        <div id="pictureContainer"></div>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Astronomy Picture of the Day. All rights reserved.</p>
+    </footer>
+
+    <script>
+        const fetchButton = document.getElementById('fetchPicture');
+        const pictureContainer = document.getElementById('pictureContainer');
+        const dateInput = document.getElementById('dateInput');
+
+        async function fetchAstronomyPicture(date) {
+            const apiKey = 'DEMO_KEY'; // Replace with your NASA API key
+            const response = await fetch(`https://api.nasa.gov/planetary/apod?api_key=${apiKey}&date=${date}`);
+            const data = await response.json();
+            return data;
+        }
+
+        function displayPicture(picture) {
+            pictureContainer.innerHTML = `
+                <h2>${picture.title}</h2>
+                <img src="${picture.url}" alt="${picture.title}">
+                <p>${picture.explanation}</p>
+            `;
+        }
+
+        fetchButton.addEventListener('click', async () => {
+            const selectedDate = dateInput.value;
+            if (selectedDate) {
+                const picture = await fetchAstronomyPicture(selectedDate);
+                displayPicture(picture);
+            } else {
+                pictureContainer.innerHTML = '<p>Please select a date.</p>';
+            }
+        });
+    </script>
+</body>
+</html>
